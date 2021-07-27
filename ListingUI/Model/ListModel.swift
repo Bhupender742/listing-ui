@@ -7,45 +7,46 @@
 
 import Foundation
 
+// MARK: - APIResponse
 struct APIResponse: Codable {
-    let categories: [Category]?
-    let excludeList: [List]?
-    
+    let categories: [Category]
+    let excludeList: [[ExcludeList]]
+
     enum CodingKeys: String, CodingKey {
         case categories
         case excludeList = "exclude_list"
     }
 }
 
+// MARK: - Category
 struct Category: Codable {
-    let id: String?
-    let filters: [Filter]?
-    
+    let categoryID: String
+    let filters: [Filter]
+    let name: String
+
     enum CodingKeys: String, CodingKey {
-        case id =  "category_id"
-        case filters
+        case categoryID = "category_id"
+        case filters, name
     }
-    
 }
 
+// MARK: - Filter
 struct Filter: Codable {
-    let defaultValue: Int?
-    let id: String?
-    let name: String?
-    
+    let filterDefault: Int
+    let id, name: String
+
     enum CodingKeys: String, CodingKey {
-        case defaultValue = "default"
-        case id
-        case name
+        case filterDefault = "default"
+        case id, name
     }
 }
 
-struct List: Codable {
-    let categoryId: String?
-    let filterId: String?
-    
+// MARK: - ExcludeList
+struct ExcludeList: Codable {
+    let categoryID, filterID: String
+
     enum CodingKeys: String, CodingKey {
-        case categoryId = "category_id"
-        case filterId = "filter_id"
+        case categoryID = "category_id"
+        case filterID = "filter_id"
     }
 }
