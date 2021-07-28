@@ -59,10 +59,11 @@ class ViewController: UIViewController {
 extension ViewController {
     
     private func setupCollectionView() {
+        myCollectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         myCollectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CustomCollectionViewCell.self))
+        
         myCollectionView.delegate = self
         myCollectionView.dataSource = self
-        self.myCollectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
 //        myCollectionView.collectionViewLayout = createCompositionalLayout()
     }
     
