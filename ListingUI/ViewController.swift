@@ -9,27 +9,6 @@ import UIKit
 
 class ViewController: UIViewController {
     
-//    private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(1.0),
-//                                              heightDimension: .fractionalHeight(0.2))
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//
-//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-//                                               heightDimension: .fractionalWidth(1.0))
-//
-//        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-//
-//        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
-//        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-//
-//        let section = NSCollectionLayoutSection(group: group)
-//        section.boundarySupplementaryItems = [headerElement]
-//
-//
-//        let layout = UICollectionViewCompositionalLayout(section: section)
-//        return layout
-//      }
-    
     private var myCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -38,6 +17,7 @@ class ViewController: UIViewController {
     }()
     
     var categoryList = [Category]()
+    var selectedIndex = [IndexPath]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +44,6 @@ extension ViewController {
         
         myCollectionView.delegate = self
         myCollectionView.dataSource = self
-//        myCollectionView.collectionViewLayout = createCompositionalLayout()
     }
     
     private func styleCollectionView() {
@@ -82,6 +61,19 @@ extension ViewController {
 
 //MARK:- UICollectionViewDelegate
 extension ViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
+        print(indexPath)
+        cell?.isSelected = true
+        cell?.toggleSelected()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
+        cell?.isSelected = false
+        cell?.toggleSelected()
+    }
     
 }
 
@@ -109,6 +101,8 @@ extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CustomCollectionViewCell.self), for: indexPath) as? CustomCollectionViewCell
+        
+        cell?.isSelected = false
         
         let categoryName = categoryList[indexPath.section].filters[indexPath.item].name
         cell?.configure(categoryName: categoryName)

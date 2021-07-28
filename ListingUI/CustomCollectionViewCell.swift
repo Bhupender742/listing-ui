@@ -9,17 +9,24 @@ import UIKit
 
 class CustomCollectionViewCell: UICollectionViewCell {
     
-    private lazy var containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     private lazy var categoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    private lazy var checkMarkImageView :UIImageView = {
+        let image = UIImage(named: "checkbox_off")
+        return UIImageView(image: image)
+    }()
+    
+    public func toggleSelected() {
+        if(isSelected == false) {
+            self.checkMarkImageView.image = UIImage(named: "checkbox_off")
+        } else {
+            self.checkMarkImageView.image = UIImage(named: "checkbox_on")
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,19 +42,20 @@ class CustomCollectionViewCell: UICollectionViewCell {
 extension CustomCollectionViewCell {
     
     private func setupViews() {
-        contentView.addSubview(containerView)
+        
+        addSubview(checkMarkImageView)
+        checkMarkImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-                                        containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-                                        containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-                                        containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                                        containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+                                        checkMarkImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+                                        checkMarkImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+                                        checkMarkImageView.widthAnchor.constraint(equalToConstant: 24),
+                                        checkMarkImageView.heightAnchor.constraint(equalToConstant: 24)
         ])
         
         addSubview(categoryLabel)
         NSLayoutConstraint.activate([
-                                        categoryLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
-                                        categoryLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
-                                        categoryLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16)
+                                        categoryLabel.leadingAnchor.constraint(equalTo: checkMarkImageView.trailingAnchor, constant: 8),
+                                        categoryLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
     
