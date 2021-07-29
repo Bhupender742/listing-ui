@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     }()
     
     var categoryList = [Category]()
+    var excludeList = [[ExcludeList]]()
+    var selectedList = [ExcludeList]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +30,10 @@ class ViewController: UIViewController {
         
         NetworkManager<APIResponse>().fetchData(from: urlString) { (result) in
             self.categoryList = result.data.categories
+            self.excludeList = result.data.excludeList
             self.myCollectionView.reloadData()
         }
     }
-
 
 }
 
@@ -66,15 +68,28 @@ extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         
+        let cell = collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
+        selectedList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
+        
         if let previousSelectedIndexArray = collectionView.indexPathsForSelectedItems?.filter( { $0.section == indexPath.section }) {
             if previousSelectedIndexArray.count > 0 {
                 let previousSelectedIndex = previousSelectedIndexArray[0]
-                let cell = collectionView.cellForItem(at: previousSelectedIndex) as? CustomCollectionViewCell
+                let previousSelectedCell = collectionView.cellForItem(at: previousSelectedIndex) as! CustomCollectionViewCell
                 collectionView.deselectItem(at: previousSelectedIndex, animated: false)
-                cell?.isSelected = false
-                cell?.toggleSelected()
+                previousSelectedCell.isSelected = false
+                previousSelectedCell.toggleSelected()
+                
+                selectedList = selectedList.filter( { $0.categoryID != "\(previousSelectedIndex.section + 1)" })
+                selectedList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
             }
         }
+        
+        
+        if excludeList.contains(where: { $0 == selectedList }) {
+            return false
+        }
+        
+        print(selectedList)
         
         return true
     }
@@ -118,6 +133,11 @@ extension ViewController: UICollectionViewDataSource {
         cell?.isSelected = false
         
         let filterName = categoryList[indexPath.section].filters[indexPath.item].name
+        let categoryID = categoryList[indexPath.section].categoryID
+        let filterID = categoryList[indexPath.section].filters[indexPath.row].id
+        
+        cell?.categoryID = categoryID
+        cell?.filterID = filterID
         cell?.configure(filterName: filterName)
         
         return cell!

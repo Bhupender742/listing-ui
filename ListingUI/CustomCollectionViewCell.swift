@@ -9,12 +9,6 @@ import UIKit
 
 class CustomCollectionViewCell: UICollectionViewCell {
     
-    private lazy var filterLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     private lazy var checkMarkImageView :UIImageView = {
         let image = UIImage(named: "checkbox_off")
         return UIImageView(image: image)
@@ -27,6 +21,20 @@ class CustomCollectionViewCell: UICollectionViewCell {
             self.checkMarkImageView.image = UIImage(named: "checkbox_on")
         }
     }
+    
+    private lazy var filterLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    public lazy var categoryID: String = {
+        return ""
+    }()
+    
+    public lazy var filterID: String = {
+        return ""
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

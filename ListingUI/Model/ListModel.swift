@@ -47,7 +47,7 @@ struct Filter: Codable {
 }
 
 // MARK: - ExcludeList
-struct ExcludeList: Codable {
+struct ExcludeList: Codable, Equatable {
     let categoryID, filterID: String
 
     enum CodingKeys: String, CodingKey {
