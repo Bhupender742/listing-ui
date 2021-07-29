@@ -9,6 +9,11 @@ import Foundation
 
 // MARK: - APIResponse
 struct APIResponse: Codable {
+    let data: Datum
+}
+
+// MARK: - Data
+struct Datum: Codable {
     let categories: [Category]
     let excludeList: [[ExcludeList]]
 

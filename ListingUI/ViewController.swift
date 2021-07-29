@@ -17,18 +17,17 @@ class ViewController: UIViewController {
     }()
     
     var categoryList = [Category]()
-    var selectedIndex = [IndexPath]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let urlString = "https://app.fakejson.com/q/WZSqwXlJ?token=g1BRxoj_H1TIYVEUqbWrRg"
+        let urlString = "https://jsonkeeper.com/b/P419"
         
         setupCollectionView()
         styleCollectionView()
         
         NetworkManager<APIResponse>().fetchData(from: urlString) { (result) in
-            self.categoryList = result.categories
+            self.categoryList = result.data.categories
             self.myCollectionView.reloadData()
         }
     }
@@ -55,25 +54,39 @@ extension ViewController {
                                         myCollectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
         myCollectionView.backgroundColor = .white
+        myCollectionView.allowsMultipleSelection = true
     }
+    
+   
     
 }
 
 //MARK:- UICollectionViewDelegate
 extension ViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
-        print(indexPath)
-        cell?.isSelected = true
-        cell?.toggleSelected()
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        
+        if let previousSelectedIndexArray = collectionView.indexPathsForSelectedItems?.filter( { $0.section == indexPath.section }) {
+            if previousSelectedIndexArray.count > 0 {
+                let previousSelectedIndex = previousSelectedIndexArray[0]
+                let cell = collectionView.cellForItem(at: previousSelectedIndex) as? CustomCollectionViewCell
+                collectionView.deselectItem(at: previousSelectedIndex, animated: false)
+                cell?.isSelected = false
+                cell?.toggleSelected()
+            }
+        }
+        
+        return true
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
-        cell?.isSelected = false
+        cell?.isSelected = true
         cell?.toggleSelected()
+        
     }
+    
     
 }
 
@@ -104,8 +117,8 @@ extension ViewController: UICollectionViewDataSource {
         
         cell?.isSelected = false
         
-        let categoryName = categoryList[indexPath.section].filters[indexPath.item].name
-        cell?.configure(categoryName: categoryName)
+        let filterName = categoryList[indexPath.section].filters[indexPath.item].name
+        cell?.configure(filterName: filterName)
         
         return cell!
     }

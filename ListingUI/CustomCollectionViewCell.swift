@@ -9,7 +9,7 @@ import UIKit
 
 class CustomCollectionViewCell: UICollectionViewCell {
     
-    private lazy var categoryLabel: UILabel = {
+    private lazy var filterLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -52,15 +52,15 @@ extension CustomCollectionViewCell {
                                         checkMarkImageView.heightAnchor.constraint(equalToConstant: 24)
         ])
         
-        addSubview(categoryLabel)
+        addSubview(filterLabel)
         NSLayoutConstraint.activate([
-                                        categoryLabel.leadingAnchor.constraint(equalTo: checkMarkImageView.trailingAnchor, constant: 8),
-                                        categoryLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+                                        filterLabel.leadingAnchor.constraint(equalTo: checkMarkImageView.trailingAnchor, constant: 8),
+                                        filterLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
     
-    public func configure(categoryName: String) {
-        categoryLabel.text = categoryName
+    public func configure(filterName: String) {
+        filterLabel.text = filterName
     }
     
 }
