@@ -19,7 +19,6 @@ class ViewController: UIViewController {
     var categoryList = [Category]()
     var excludeList = [[ExcludeList]]()
     var selectedFilterList = [ExcludeList]()
-//    var selectedIndexArray = [IndexPath]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +66,6 @@ extension ViewController {
             let excludeFilterSet  = NSSet(array: excludeFilter)
             if excludeFilterSet.isSubset(of: selectedFilterSet as! Set<AnyHashable>) {
                 selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
-//                selectedIndexArray = selectedIndexArray.filter( { $0 != indexPath })
                 
                 let refreshAlert = UIAlertController(title: "Sorry :(", message: "Current selection not available", preferredStyle: UIAlertController.Style.alert)
                 
@@ -97,14 +95,12 @@ extension ViewController: UICollectionViewDelegate {
                 previousSelectedCell.isSelected = false
                 previousSelectedCell.toggleSelected()
                 
-//                selectedIndexArray = selectedIndexArray.filter( { $0.section != previousSelectedIndex.section } )
                 selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(previousSelectedIndex.section + 1)" })
             }
         }
         
         let cell = collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
         selectedFilterList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
-//        selectedIndexArray.append(indexPath)
         
         return containsExcludeList(indexPath: indexPath)
     }
@@ -117,7 +113,6 @@ extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
-//        selectedIndexArray = selectedIndexArray.filter( { $0 != indexPath })
         selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
         cell?.isSelected = false
         cell?.toggleSelected()
@@ -169,7 +164,7 @@ extension ViewController: UICollectionViewDataSource {
              let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! SectionHeader
             sectionHeader.label.text = categoryList[indexPath.section].name
              return sectionHeader
-        } else { //No footer in this case but can add option for that
+        } else { 
              return UICollectionReusableView()
         }
     }
