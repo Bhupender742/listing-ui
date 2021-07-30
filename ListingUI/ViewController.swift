@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     var categoryList = [Category]()
     var excludeList = [[ExcludeList]]()
     var selectedFilterList = [ExcludeList]()
-    var selectedIndexArray = [IndexPath]()
+//    var selectedIndexArray = [IndexPath]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +60,27 @@ extension ViewController {
         myCollectionView.allowsMultipleSelection = true
     }
     
-   
+    private func containsExcludeList(indexPath: IndexPath) -> Bool {
+        let selectedFilterSet = NSSet(array: selectedFilterList)
+        
+        for excludeFilter in excludeList {
+            let excludeFilterSet  = NSSet(array: excludeFilter)
+            if excludeFilterSet.isSubset(of: selectedFilterSet as! Set<AnyHashable>) {
+                selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
+//                selectedIndexArray = selectedIndexArray.filter( { $0 != indexPath })
+                
+                let refreshAlert = UIAlertController(title: "Sorry :(", message: "Current selection not available", preferredStyle: UIAlertController.Style.alert)
+                
+                refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+
+                self.present(refreshAlert, animated: true, completion: nil)
+                
+                return false
+            }
+            
+        }
+        return true
+    }
     
 }
 
@@ -77,29 +97,28 @@ extension ViewController: UICollectionViewDelegate {
                 previousSelectedCell.isSelected = false
                 previousSelectedCell.toggleSelected()
                 
-                selectedIndexArray = selectedIndexArray.filter( { $0.section != previousSelectedIndex.section } )
+//                selectedIndexArray = selectedIndexArray.filter( { $0.section != previousSelectedIndex.section } )
                 selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(previousSelectedIndex.section + 1)" })
             }
         }
         
         let cell = collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
         selectedFilterList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
-        selectedIndexArray.append(indexPath)
+//        selectedIndexArray.append(indexPath)
         
-        return true
+        return containsExcludeList(indexPath: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
         cell?.isSelected = true
         cell?.toggleSelected()
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
-        selectedIndexArray = selectedIndexArray.filter( { $0 != indexPath })
+//        selectedIndexArray = selectedIndexArray.filter( { $0 != indexPath })
+        selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
         cell?.isSelected = false
         cell?.toggleSelected()
     }
@@ -159,3 +178,4 @@ extension ViewController: UICollectionViewDataSource {
         return CGSize(width: collectionView.frame.width, height: 40)
     }
 }
+
