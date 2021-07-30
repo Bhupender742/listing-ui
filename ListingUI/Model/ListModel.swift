@@ -47,11 +47,19 @@ struct Filter: Codable {
 }
 
 // MARK: - ExcludeList
-struct ExcludeList: Codable, Equatable {
+struct ExcludeList: Codable {
     let categoryID, filterID: String
-
+    
     enum CodingKeys: String, CodingKey {
         case categoryID = "category_id"
         case filterID = "filter_id"
     }
+}
+
+extension ExcludeList: Equatable {
+    static func == (lhs: ExcludeList, rhs: ExcludeList) -> Bool {
+            return
+                lhs.categoryID == rhs.categoryID &&
+                lhs.filterID == rhs.filterID
+        }
 }

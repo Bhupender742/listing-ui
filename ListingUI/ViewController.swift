@@ -18,7 +18,8 @@ class ViewController: UIViewController {
     
     var categoryList = [Category]()
     var excludeList = [[ExcludeList]]()
-    var selectedList = [ExcludeList]()
+    var selectedFilterList = [ExcludeList]()
+    var selectedIndexArray = [IndexPath]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,10 +68,7 @@ extension ViewController {
 extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        
-        let cell = collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
-        selectedList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
-        
+       
         if let previousSelectedIndexArray = collectionView.indexPathsForSelectedItems?.filter( { $0.section == indexPath.section }) {
             if previousSelectedIndexArray.count > 0 {
                 let previousSelectedIndex = previousSelectedIndexArray[0]
@@ -79,17 +77,14 @@ extension ViewController: UICollectionViewDelegate {
                 previousSelectedCell.isSelected = false
                 previousSelectedCell.toggleSelected()
                 
-                selectedList = selectedList.filter( { $0.categoryID != "\(previousSelectedIndex.section + 1)" })
-                selectedList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
+                selectedIndexArray = selectedIndexArray.filter( { $0.section != previousSelectedIndex.section } )
+                selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(previousSelectedIndex.section + 1)" })
             }
         }
         
-        
-        if excludeList.contains(where: { $0 == selectedList }) {
-            return false
-        }
-        
-        print(selectedList)
+        let cell = collectionView.cellForItem(at: indexPath) as! CustomCollectionViewCell
+        selectedFilterList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
+        selectedIndexArray.append(indexPath)
         
         return true
     }
@@ -100,6 +95,13 @@ extension ViewController: UICollectionViewDelegate {
         cell?.isSelected = true
         cell?.toggleSelected()
         
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? CustomCollectionViewCell
+        selectedIndexArray = selectedIndexArray.filter( { $0 != indexPath })
+        cell?.isSelected = false
+        cell?.toggleSelected()
     }
     
     
