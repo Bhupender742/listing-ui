@@ -1,5 +1,5 @@
 //
-//  CustomCollectionViewCell.swift
+//  FilterCell.swift
 //  ListingUI
 //
 //  Created by Bhupender Rawat on 27/07/21.
@@ -7,20 +7,12 @@
 
 import UIKit
 
-class CustomCollectionViewCell: UICollectionViewCell {
+class FilterCell: UICollectionViewCell {
     
     private lazy var checkMarkImageView :UIImageView = {
         let image = UIImage(named: "checkbox_off")
         return UIImageView(image: image)
     }()
-    
-    public func toggleSelected() {
-        if(isSelected == false) {
-            self.checkMarkImageView.image = UIImage(named: "checkbox_off")
-        } else {
-            self.checkMarkImageView.image = UIImage(named: "checkbox_on")
-        }
-    }
     
     private lazy var filterLabel: UILabel = {
         let label = UILabel()
@@ -36,6 +28,16 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return ""
     }()
     
+    override var isSelected: Bool {
+        didSet {
+            if(isSelected == false) {
+                self.checkMarkImageView.image = UIImage(named: "checkbox_off")
+            } else {
+                self.checkMarkImageView.image = UIImage(named: "checkbox_on")
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupViews()
@@ -47,7 +49,7 @@ class CustomCollectionViewCell: UICollectionViewCell {
     
 }
 
-extension CustomCollectionViewCell {
+extension FilterCell {
     
     private func setupViews() {
         
@@ -72,3 +74,5 @@ extension CustomCollectionViewCell {
     }
     
 }
+
+extension FilterCell: Reusable {}

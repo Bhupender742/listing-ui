@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		924BA28826B4F49C001DE782 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924BA28726B4F49C001DE782 /* Reusable.swift */; };
 		924D161926B02AC00083ECA0 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D161826B02AC00083ECA0 /* SectionHeader.swift */; };
 		927EA51026AFBEE700D67D56 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EA50F26AFBEE700D67D56 /* AppDelegate.swift */; };
 		927EA51226AFBEE700D67D56 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EA51126AFBEE700D67D56 /* SceneDelegate.swift */; };
@@ -16,10 +17,11 @@
 		927EA51C26AFBEE700D67D56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 927EA51A26AFBEE700D67D56 /* LaunchScreen.storyboard */; };
 		927EA52526AFBFCE00D67D56 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EA52426AFBFCE00D67D56 /* NetworkManager.swift */; };
 		927EA52A26AFC25400D67D56 /* ListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EA52926AFC25400D67D56 /* ListModel.swift */; };
-		927EA52C26AFCBDE00D67D56 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EA52B26AFCBDE00D67D56 /* CustomCollectionViewCell.swift */; };
+		927EA52C26AFCBDE00D67D56 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927EA52B26AFCBDE00D67D56 /* FilterCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		924BA28726B4F49C001DE782 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		924D161826B02AC00083ECA0 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		927EA50C26AFBEE700D67D56 /* ListingUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ListingUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		927EA50F26AFBEE700D67D56 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -31,7 +33,7 @@
 		927EA51D26AFBEE700D67D56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		927EA52426AFBFCE00D67D56 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		927EA52926AFC25400D67D56 /* ListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListModel.swift; sourceTree = "<group>"; };
-		927EA52B26AFCBDE00D67D56 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		927EA52B26AFCBDE00D67D56 /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +77,7 @@
 				927EA50F26AFBEE700D67D56 /* AppDelegate.swift */,
 				927EA51126AFBEE700D67D56 /* SceneDelegate.swift */,
 				927EA51326AFBEE700D67D56 /* ViewController.swift */,
-				927EA52B26AFCBDE00D67D56 /* CustomCollectionViewCell.swift */,
+				927EA52B26AFCBDE00D67D56 /* FilterCell.swift */,
 				925A734F26B10F7E00807501 /* SectionHeader */,
 				927EA52626AFC12800D67D56 /* Model */,
 				927EA52326AFBFBA00D67D56 /* NetworkManager */,
@@ -83,6 +85,7 @@
 				927EA51826AFBEE700D67D56 /* Assets.xcassets */,
 				927EA51A26AFBEE700D67D56 /* LaunchScreen.storyboard */,
 				927EA51D26AFBEE700D67D56 /* Info.plist */,
+				924BA28726B4F49C001DE782 /* Reusable.swift */,
 			);
 			path = ListingUI;
 			sourceTree = "<group>";
@@ -174,7 +177,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				927EA52526AFBFCE00D67D56 /* NetworkManager.swift in Sources */,
-				927EA52C26AFCBDE00D67D56 /* CustomCollectionViewCell.swift in Sources */,
+				927EA52C26AFCBDE00D67D56 /* FilterCell.swift in Sources */,
+				924BA28826B4F49C001DE782 /* Reusable.swift in Sources */,
 				927EA51426AFBEE700D67D56 /* ViewController.swift in Sources */,
 				924D161926B02AC00083ECA0 /* SectionHeader.swift in Sources */,
 				927EA51026AFBEE700D67D56 /* AppDelegate.swift in Sources */,
@@ -329,6 +333,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A99W3T6RFB;
 				INFOPLIST_FILE = ListingUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -348,6 +353,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A99W3T6RFB;
 				INFOPLIST_FILE = ListingUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
