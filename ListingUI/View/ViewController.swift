@@ -16,23 +16,20 @@ class ViewController: UIViewController {
         return collectionView
     }()
     
-    private var categoryList = [Category]()
-    private var excludeList = [[ExcludeList]]()
-    private var selectedFilterList = [ExcludeList]()
+    private var filterModel = FilterViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let urlString = "https://jsonkeeper.com/b/P419"
-        
         setupCollectionView()
         styleCollectionView()
         
-        NetworkManager<APIResponse>().fetchData(from: urlString) { (result) in
-            self.categoryList = result.data.categories
-            self.excludeList = result.data.excludeList
-            self.myCollectionView.reloadData()
+        filterModel.fetchFilters {
+            DispatchQueue.main.async {
+                self.myCollectionView.reloadData()
+            }
         }
+        
     }
 
 }
@@ -60,12 +57,12 @@ extension ViewController {
     }
     
     private func containsExcludeList(indexPath: IndexPath) -> Bool {
-        let selectedFilterSet = NSSet(array: selectedFilterList)
+        let selectedFilterSet = NSSet(array: filterModel.selectedFilterList)
         
-        for excludeFilter in excludeList {
+        for excludeFilter in filterModel.excludeList {
             let excludeFilterSet  = NSSet(array: excludeFilter)
             if excludeFilterSet.isSubset(of: selectedFilterSet as! Set<AnyHashable>) {
-                selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
+                filterModel.selectedFilterList = filterModel.selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
                 
                 let refreshAlert = UIAlertController(title: "Sorry :(", message: "Current selection not available", preferredStyle: UIAlertController.Style.alert)
                 
@@ -94,12 +91,12 @@ extension ViewController: UICollectionViewDelegate {
                 collectionView.deselectItem(at: previousSelectedIndex, animated: false)
                 previousSelectedCell.isSelected = false
                 
-                selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(previousSelectedIndex.section + 1)" })
+                filterModel.selectedFilterList = filterModel.selectedFilterList.filter( { $0.categoryID != "\(previousSelectedIndex.section + 1)" })
             }
         }
         
         let cell = collectionView.cellForItem(at: indexPath) as! FilterCell
-        selectedFilterList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
+        filterModel.selectedFilterList.append(ExcludeList(categoryID: cell.categoryID, filterID: cell.filterID))
         
         return containsExcludeList(indexPath: indexPath)
     }
@@ -111,7 +108,7 @@ extension ViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? FilterCell
-        selectedFilterList = selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
+        filterModel.selectedFilterList = filterModel.selectedFilterList.filter( { $0.categoryID != "\(indexPath.section + 1)"})
         cell?.isSelected = false
     }
     
@@ -133,19 +130,19 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
 extension ViewController: UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        categoryList.count
+        filterModel.getNumberOfSection()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        categoryList[section].filters.count
+        filterModel.getNumberOfItemsInSection(section: section)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: FilterCell.self), for: indexPath) as? FilterCell
         
-        let filterName = categoryList[indexPath.section].filters[indexPath.item].name
-        let categoryID = categoryList[indexPath.section].categoryID
-        let filterID = categoryList[indexPath.section].filters[indexPath.row].id
+        let filterName = filterModel.getFilterName(indexPath: indexPath)
+        let categoryID = filterModel.getCategoryID(indexPath: indexPath)
+        let filterID = filterModel.getFilterID(indexPath: indexPath)
         
         cell?.categoryID = categoryID
         cell?.filterID = filterID
@@ -159,7 +156,7 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseIdentifier, for: indexPath) as! SectionHeader
-            sectionHeader.label.text = categoryList[indexPath.section].name
+            sectionHeader.label.text = filterModel.getCategoryName(indexPath: indexPath)
              return sectionHeader
         } else { 
              return UICollectionReusableView()
